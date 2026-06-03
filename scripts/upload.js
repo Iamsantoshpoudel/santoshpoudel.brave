@@ -25,4 +25,6 @@ async function uploadToPinata() {
   }
 }
 
+
+
 uploadToPinata();
