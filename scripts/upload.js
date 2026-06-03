@@ -2,8 +2,8 @@ const axios = require('axios');
 const fs = require('fs');
 const FormData = require('form-data');
 
-const pinataApiKey = secrets.PINATA_API_KEY;
-const pinataApiSecret = secrets.PINATA_API_SECRET;
+const pinataApiKey = process.env.PINATA_API_KEY;
+const pinataApiSecret = process.env.PINATA_API_SECRET;
 
 const filePath = '../build.zip';  // Adjust the path if needed
 
@@ -24,7 +24,4 @@ async function uploadToPinata() {
     console.error('Error uploading to Pinata:', error.response ? error.response.data : error.message);
   }
 }
-
-
-
 uploadToPinata();
