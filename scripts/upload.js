@@ -1,24 +1,28 @@
 const axios = require('axios');
-const FormData = require('form-data');
 const fs = require('fs');
+const FormData = require('form-data');
 
-const apiKey = process.env.PINATA_API_KEY;
-const apiSecret = process.env.PINATA_API_SECRET;
-const filePath = 'path/to/your/build.zip'; // Replace with your file path
+const pinataApiKey = process.env.PINATA_API_KEY;
+const pinataApiSecret = process.env.PINATA_API_SECRET;
 
-const form = new FormData();
-form.append('file', fs.createReadStream(filePath));
+const filePath = '../build.zip';  // Adjust the path if needed
 
-axios.post('https://api.pinata.cloud/pinning/pinFileToIPFS', form, {
-    headers: {
-        ...form.getHeaders(),
-        'pinata_api_key': apiKey,
-        'pinata_api_secret': apiSecret      
-    }
-})
-.then(response => {
-    console.log('File uploaded! CID:', response.data.IpfsHash);
-})
-.catch(error => {
-    console.error('Error uploading file:', error.response ? error.response.data : error.message);
-});
+async function uploadToPinata() {
+  const form = new FormData();
+  form.append('file', fs.createReadStream(filePath));
+
+  try {
+    const response = await axios.post('https://api.pinata.cloud/pinning/pinFileToIPFS', form.getHeaders(), {
+      headers: {
+        'Authorization': `Bearer ${pinataApiKey}:${pinataApiSecret}`,
+      },
+      data: form,
+    });
+
+    console.log('CID:', response.data.IpfsHash);
+  } catch (error) {
+    console.error('Error uploading to Pinata:', error.response ? error.response.data : error.message);
+  }
+}
+
+uploadToPinata();
