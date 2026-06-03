@@ -2,8 +2,8 @@ const axios = require('axios');
 const fs = require('fs');
 const FormData = require('form-data');
 
-const pinataApiKey = process.env.PINATA_API_KEY;
-const pinataApiSecret = process.env.PINATA_API_SECRET;
+const pinataApiKey = secrets.PINATA_API_KEY;
+const pinataApiSecret = secrets.PINATA_API_SECRET;
 
 const filePath = '../build.zip';  // Adjust the path if needed
 
