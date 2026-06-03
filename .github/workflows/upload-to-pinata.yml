@@ -1,22 +1,22 @@
-name: Deploy to Pinata
+name: Deploy Full Project to Pinata
 
 on:
   push:
     branches:
-      - main  # or your default branch
+      - main  # Adjust if your branch is different
 
 jobs:
   build_and_upload:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: Check out code
         uses: actions/checkout@v4
 
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '20'  # Use your project's Node.js version
+          node-version: '20'  # Ensure correct Node version for your project
 
       - name: Install dependencies
         run: npm install
@@ -24,17 +24,17 @@ jobs:
       - name: Build Next.js app
         run: npm run build
 
-      - name: Zip project files
+      - name: Zip all root files and folders
         run: |
           mkdir build-zip
           cp -r .next build-zip/
+          cp -r app build-zip/
           cp -r public build-zip/
-          cp -r pages build-zip/
-          cp -r styles build-zip/
           cp package.json build-zip/
           cp package-lock.json build-zip/
+          cp README.md build-zip/
           cd build-zip
-          zip -r ../build.zip .  # Zip everything
+          zip -r ../build.zip .  # Zip all contents of build-zip
 
       - name: Upload to Pinata
         run: node scripts/upload.js
